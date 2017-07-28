@@ -106,14 +106,13 @@ params[], int /*noParams*/){
 
 }
 
-void getV2(Node t, Node in[], int /*dimIn*/, Node out[], int /*dimOut*/, Node
-params[], int /*noParams*/)
+void getV2(Node t, Node in[], int /*dimIn*/, Node out[], int /*dimOut*/, Node params[], int /*noParams*/)
 {
   Node squaresSum = (sqr(in[0]) + sqr(in[1]))^1.5;
   out[0] = in[2];
   out[1] = in[3];
-  out[2] =  (params[1]*in[3] - in[0]*params[0])/squaresSum;
-  out[3] = -(params[1]*in[2] + in[1]*params[0])/squaresSum;
+  out[2] = (-in[0] * params[0] + Node(-2.) * params[1] * in[3] ) / squaresSum;
+  out[3] = (-in[1] * params[0] - Node(-2.) * params[1] * in[2] ) / squaresSum;
 }
 
 template<class T, class S, class F>
@@ -142,12 +141,12 @@ int main(int, char*[]){
 
   using namespace LD;
   MpFloat::setDefaultPrecision(1280);
-  cout.precision(15);
+  cout.precision(10);
   int paramsNumber = 2;
-  int dim = 6;
+  int dim = 4;
 
   // funkcja getV2 jest identyczna jak getV tylko jest uproszczona - os z nie jest uwzgledniana
-  Map f(dim==4? getV : getV,dim,dim,paramsNumber);
+  Map f(dim==4? getV2 : myGetV, dim, dim, paramsNumber);
 
   //Map f(getV,dim,dim,paramsNumber);
 
@@ -163,12 +162,12 @@ int main(int, char*[]){
   s.setRelativeTolerance(1e-20);
 
   Real initTime = 0.0;
-  Real finalTime = 300.5;
+  Real finalTime = 30.5;
   Real startTime = 0.0;
 
   TimeMap::SolutionCurve solution(initTime);
   TimeMap tm3(s);
-  Real d[] = {Real(1.0),Real(0.0),Real(1.0),Real(0.0),Real(0.0),Real(0.0)};
+  Real d[] = {Real(1.0),Real(0.0),Real(0.0),Real(0.0),Real(0.0),Real(0.0)};
 
 
   Vector u3(dim,d);
@@ -186,12 +185,9 @@ int main(int, char*[]){
   //}
 
 
-    for(double d = 0.0 ; d< 300.5; d=d+0.1){
+    for(double d = 0.0 ; d < 30.5; d = d + 0.1){
         cout << "t: " << d << solution(d) << endl;
     }
-  //cout << "t: " << 0.0 << solution(0.0) << endl;
-  //cout << "t: " << 1.0 << solution(1.0) << endl;
-  //cout << "t: " << 30.5 << solution(30.5) << endl;
 
   cout << "------" << endl;
 }
