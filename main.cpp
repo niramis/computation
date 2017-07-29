@@ -89,17 +89,21 @@ params[], int /*noParams*/){
     Node ySquare = sqr(y);
     Node zSquare = sqr(z);
 
-    Node squaresSum = xSquare + ySquare + zSquare;
+    //Node squaresSum = xSquare + ySquare + zSquare;
+    Node squaresSum3 = (sqr(in[0]) + sqr(in[1]) + sqr(in[2])) ^ 1.5;
+    Node squaresSum5 = (sqr(in[0]) + sqr(in[1]) + sqr(in[2])) ^ 2.5;
 
-    Node s3 = (squaresSum^1.5);
+    //Node s3 = (squaresSum^1.5);
     //Node s5 = ()squaresSum^5);
 
     out[0] = vx;
     out[1] = vy;
-    out[3] = Node(0.);
+    out[2] = Node(0.);
 
-    out[4] = (Node(-1.) * ce * x / s3) - Node(2.) * cs * (vy / s3);
-    out[5] = (Node(-1.) * ce * y / s3) + Node(2.) * cs * (vx / s3);
+    //out[4] = (Node(-1.) * ce * x / s3) - Node(2.) * cs * (vy / s3);
+    //out[5] = (Node(-1.) * ce * y / s3) + Node(2.) * cs * (vx / s3);
+    out[3] = (-in[0] * params[0] + Node(-2.) * params[1] * in[4] ) / squaresSum3;
+    out[4] = (-in[1] * params[0] - Node(-2.) * params[1] * in[3] ) / squaresSum3;
     //out[5] = (con *(minuss*vy*x + vx*y)*(z))*((squaresSum)^-2.5) - partIIz;
     out[5] = Node(0.);
 
@@ -143,7 +147,7 @@ int main(int, char*[]){
   MpFloat::setDefaultPrecision(1280);
   cout.precision(10);
   int paramsNumber = 2;
-  int dim = 4;
+  int dim = 6;
 
   // funkcja getV2 jest identyczna jak getV tylko jest uproszczona - os z nie jest uwzgledniana
   Map f(dim==4? getV2 : myGetV, dim, dim, paramsNumber);
