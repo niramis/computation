@@ -83,7 +83,7 @@ params[], int /*noParams*/){
 
     out[3] = (-in[0] * params[0] ) / squaresSum3 + (Node(6.) * params[1] * in[2] * (Node(-1.) * in[5] * in[1] + in[4] * in[2])) / (squaresSum5) - Node(2.) * params[1] * in[4]  / squaresSum3;
     out[4] = (-in[1] * params[0] ) / squaresSum3 + (Node(6.) * params[1] * in[2] * ( in[5] * in[0] - in[3] * in[2])) / (squaresSum5) + Node(2.) * params[1] * in[3]  / squaresSum3;
-    out[5] = Node(6.) * params[1] * (Node(-1.) * in[4] * in[0] + in[3] * in[1]) * in[2]/ squaresSum3;
+    out[5] = Node(6.) * params[1] * (Node(-1.) * in[4] * in[0] + in[3] * in[1]) * in[2]/ squaresSum5 - params[0] * in[2] / squaresSum3;
 
 }
 
