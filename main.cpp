@@ -11,30 +11,6 @@ using capd::autodiff::Node;
 
 
 
-void getVbad(Node t, Node in[], int /*dimIn*/, Node out[], int /*dimOut*/, Node
-params[], int /*noParams*/)
-{
-  Node ce = params[0];
-  Node cs = params[1];
-
-  Node xSquare = in[0]*in[0];
-  Node ySquare = in[1]*in[1];
-  Node zSquare = in[2]*in[2];
-
-  Node s = sqrt((xSquare + ySquare + zSquare)*(xSquare + ySquare + zSquare)*(xSquare
-+ ySquare + zSquare));
-  Node trzy = Node(3.);
-  Node jeden = Node(1.);
-
-  out[3] = in[0]*(trzy*cs*(in[5]*in[1]-in[4]*in[2])-ce)/s;
-  out[4] = (in[5]*(cs-trzy*cs*xSquare)    - ce*in[1] + trzy*cs*in[3]*in[0]*in[2])/s;
-  out[5] = (cs*in[4]*(trzy*xSquare-jeden) - ce*in[2] - trzy*cs*in[3]*in[0]*in[1])/s;
-
-  out[0] = in[3]+Node(0.);
-  out[1] = in[4]+Node(0.);
-  out[2] = in[5]+Node(0.);
-}
-
 void getV(Node t, Node in[], int /*dimIn*/, Node out[], int /*dimOut*/, Node
 params[], int /*noParams*/)
 {
@@ -163,7 +139,7 @@ int main(int, char*[]){
   MpFloat::setDefaultPrecision(1280);
   cout.precision(10);
   int paramsNumber = 2;
-  int dim = 6;
+  int dim = 4;
 
   // funkcja getV2 jest identyczna jak getV tylko jest uproszczona - os z nie jest uwzgledniana
   Map f(dim==4? getV2 : myGetV3, dim, dim, paramsNumber);
@@ -187,7 +163,7 @@ int main(int, char*[]){
 
   TimeMap::SolutionCurve solution(initTime);
   TimeMap tm3(s);
-  Real d[] = {Real(1.0),Real(1.0),Real(0.0),Real(0.0),Real(0.0),Real(0.0)};
+  Real d[] = {Real(1.0),Real(0.0),Real(0.0),Real(0.0),Real(0.0),Real(0.0)};
 
 
   Vector u3(dim,d);
@@ -205,8 +181,9 @@ int main(int, char*[]){
   //}
 
 
-    for(double d = 0.0 ; d < 30.5; d = d + 0.1){
-        cout << "t: " << d << " : "<< solution(d) << endl;
+    for(double d = 0.0 ; d < 30.5; d = d + 0.01){
+        //cout << "t: " << d << " : "<< solution(d) << endl;
+        cout << "{" << solution(d)[0] << "," << solution(d)[1] << "}, ";
     }
 
   cout << "------" << endl;
