@@ -187,7 +187,7 @@ int main(int, char*[]){
 
   TimeMap::SolutionCurve solution(initTime);
   TimeMap tm3(s);
-  Real d[] = {Real(1.0),Real(0.0),Real(0.0),Real(0.0),Real(0.0),Real(0.0)};
+  Real d[] = {Real(1.0),Real(1.0),Real(0.0),Real(0.0),Real(0.0),Real(0.0)};
 
 
   Vector u3(dim,d);
