@@ -73,37 +73,17 @@ params[], int /*noParams*/)
 
 void myGetV3(Node t, Node in[], int /*dimIn*/, Node out[], int /*dimOut*/, Node
 params[], int /*noParams*/){
-    Node x = in[0];
-    Node y = in[1];
-    Node z = in[2];
-
-    Node vx = in[3];
-    Node vy = in[4];
-    Node vz = in[5];
-
-    Node ce = params[0];
-    Node cs = params[1];
 
     Node squaresSum3 = (sqr(in[0]) + sqr(in[1]) + sqr(in[2])) ^ 1.5;
     Node squaresSum5 = (sqr(in[0]) + sqr(in[1]) + sqr(in[2])) ^ 2.5;
 
-    //Node s3 = (squaresSum^1.5);
-    //Node s5 = ()squaresSum^5);
-
-    out[0] = vx;
-    out[1] = vy;
-    out[2] = vz;
-
-//out[3] = (-in[0] * params[0]) / squaresSum3 - Node(2.) * ( Node(-3.) * Node(0.) * (Node(-0.) * in[1] + in[4] * Node(0.)) / squaresSum5 + in[4] / squaresSum3);
-
-    //out[3] = (-in[0] * params[0] ) / squaresSum3 - (Node(2.) * params[1] * Node(-3.) * in[2] * (-in[5] * in[1] + in[4] * in[2]) / squaresSum5 ) + Node(2.) * params[1] * in[4]  / squaresSum3;
+    out[0] = in[3];
+    out[1] = in[4];
+    out[2] = in[5];
 
     out[3] = (-in[0] * params[0] ) / squaresSum3 + (Node(6.) * params[1] * in[2] * (Node(-1.) * in[5] * in[1] + in[4] * in[2])) / (squaresSum5) - Node(2.) * params[1] * in[4]  / squaresSum3;
-
-    //out[3] = (-in[0] * params[0] + Node(-2.) * params[1] * in[4] ) / squaresSum3;
-    //out[4] = (-in[1] * params[0] - Node(-2.) * params[1] * in[3] ) / squaresSum3;
     out[4] = (-in[1] * params[0] ) / squaresSum3 + (Node(6.) * params[1] * in[2] * ( in[5] * in[0] - in[3] * in[2])) / (squaresSum5) + Node(2.) * params[1] * in[3]  / squaresSum3;
-    out[5] = Node(0.);
+    out[5] = Node(6.) * params[1] * (Node(-1.) * in[4] * in[0] + in[3] * in[1]) * in[2]/ squaresSum3;
 
 }
 
