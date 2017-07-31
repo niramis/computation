@@ -139,7 +139,7 @@ int main(int, char*[]){
   MpFloat::setDefaultPrecision(1280);
   cout.precision(10);
   int paramsNumber = 2;
-  int dim = 4;
+  int dim = 6;
 
   // funkcja getV2 jest identyczna jak getV tylko jest uproszczona - os z nie jest uwzgledniana
   Map f(dim==4? getV2 : myGetV3, dim, dim, paramsNumber);
@@ -183,7 +183,8 @@ int main(int, char*[]){
 
     for(double d = 0.0 ; d < 30.5; d = d + 0.01){
         //cout << "t: " << d << " : "<< solution(d) << endl;
-        cout << "{" << solution(d)[0] << "," << solution(d)[1] << "}, ";
+        //cout << "{" << solution(d)[0] << "," << solution(d)[1] << "}, ";
+        cout << "t: " << d << " : "<< solution(d)[0] << " , "<< solution(d)[1] << " , "<< solution(d)[2] << endl;
     }
 
   cout << "------" << endl;
