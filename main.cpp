@@ -133,13 +133,29 @@ namespace Mp{
   typedef MpVector Vector;
 }
 
+void find_and_replace(string& source, string const& find, string const& replace)
+{
+    for(string::size_type i = 0; (i = source.find(find, i)) != string::npos;)
+    {
+        source.replace(i, find.length(), replace);
+        i += replace.length();
+    }
+}
+
+string convert(long double myLongDouble) {
+    stringstream blah;
+    blah << myLongDouble;
+
+    return blah.str();
+}
+
 int main(int, char*[]){
 
   using namespace LD;
   MpFloat::setDefaultPrecision(1280);
   cout.precision(10);
   int paramsNumber = 2;
-  int dim = 6;
+  int dim = 4;
 
   // funkcja getV2 jest identyczna jak getV tylko jest uproszczona - os z nie jest uwzgledniana
   Map f(dim==4? getV2 : myGetV3, dim, dim, paramsNumber);
@@ -167,12 +183,12 @@ int main(int, char*[]){
 
 
   Vector u3(dim,d);
-  cout << f(u3) << endl;
+  //cout << f(u3) << endl;
 
   tm3(finalTime, u3,solution);
-  cout << "domain = [" << solution.getLeftDomain() << "," <<
-  solution.getRightDomain() << "]\n";
-  cout << "------" << endl;
+  //cout << "domain = [" << solution.getLeftDomain() << "," <<
+  //solution.getRightDomain() << "]\n";
+  //cout << "------" << endl;
 
   int N = 500;
 
@@ -183,9 +199,28 @@ int main(int, char*[]){
 
     for(double d = 0.0 ; d < 30.5; d = d + 0.01){
         //cout << "t: " << d << " : "<< solution(d) << endl;
-        //cout << "{" << solution(d)[0] << "," << solution(d)[1] << "}, ";
-        cout << "t: " << d << " : "<< solution(d)[0] << " , "<< solution(d)[1] << " , "<< solution(d)[2] << endl;
+        string text1 = convert(solution(d)[0]);
+        string text2 = convert(solution(d)[1]);
+
+        find_and_replace(text1, "e", "*^");
+        find_and_replace(text2, "e", "*^");
+
+        //cout << "{" << solution(d)[0] << "," << solution(d)[1] << ", 0"<< "}, ";
+
+        cout << "{" << text1 << "," << text2 << ", 0"<< "}, ";
+
+        //cout << "t: " << d << " : "<< solution(d)[0] << " , "<< solution(d)[1] << " , "<< solution(d)[2] << endl;
     }
 
-  cout << "------" << endl;
+/*
+   string text;
+
+    // simple replace
+    text = "i have a blue house and a blue car";
+    cout << "string:  " << text << endl;
+    find_and_replace(text, "e", "*^");
+    cout << "replace: " << text << endl;
+    */
+
+  //cout << "------" << endl;
 }
