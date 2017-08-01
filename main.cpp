@@ -155,7 +155,7 @@ int main(int, char*[]){
   MpFloat::setDefaultPrecision(1280);
   cout.precision(10);
   int paramsNumber = 2;
-  int dim = 4;
+  int dim = 6;
 
   // funkcja getV2 jest identyczna jak getV tylko jest uproszczona - os z nie jest uwzgledniana
   Map f(dim==4? getV2 : myGetV3, dim, dim, paramsNumber);
@@ -179,7 +179,7 @@ int main(int, char*[]){
 
   TimeMap::SolutionCurve solution(initTime);
   TimeMap tm3(s);
-  Real d[] = {Real(1.0),Real(0.0),Real(0.0),Real(0.0),Real(0.0),Real(0.0)};
+  Real d[] = {Real(1.0),Real(0.0),Real(1.0),Real(0.0),Real(0.0),Real(0.0)};
 
 
   Vector u3(dim,d);
@@ -197,30 +197,39 @@ int main(int, char*[]){
   //}
 
 
-    for(double d = 0.0 ; d < 30.5; d = d + 0.01){
+    for(double d = 0.0 ; d < 30.5; d = d + 0.002){
         //cout << "t: " << d << " : "<< solution(d) << endl;
-        string text1 = convert(solution(d)[0]);
-        string text2 = convert(solution(d)[1]);
 
+        //plot 2d output
+        /*string text0 = convert(solution(d)[0]);
+        string text1 = convert(solution(d)[1]);
+
+        find_and_replace(text0, "e", "*^");
         find_and_replace(text1, "e", "*^");
-        find_and_replace(text2, "e", "*^");
 
         //cout << "{" << solution(d)[0] << "," << solution(d)[1] << ", 0"<< "}, ";
 
-        cout << "{" << text1 << "," << text2 << ", 0"<< "}, ";
+        cout << "{" << text0 << "," << text1 << ", 0"<< "}, ";
+        */
+
+
+
+
+
+
+        // plot 3d output
+        string text0 = convert(solution(d)[0]);
+        string text1 = convert(solution(d)[1]);
+        string text2 = convert(solution(d)[2]);
+
+        find_and_replace(text0, "e", "*^");
+        find_and_replace(text1, "e", "*^");
+        find_and_replace(text2, "e", "*^");
+
+        cout << "{" << text0 << "," << text1 << "," << text2 << "}, ";
 
         //cout << "t: " << d << " : "<< solution(d)[0] << " , "<< solution(d)[1] << " , "<< solution(d)[2] << endl;
     }
 
-/*
-   string text;
 
-    // simple replace
-    text = "i have a blue house and a blue car";
-    cout << "string:  " << text << endl;
-    find_and_replace(text, "e", "*^");
-    cout << "replace: " << text << endl;
-    */
-
-  //cout << "------" << endl;
 }
