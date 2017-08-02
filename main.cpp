@@ -174,12 +174,12 @@ int main(int, char*[]){
   s.setRelativeTolerance(1e-20);
 
   Real initTime = 0.0;
-  Real finalTime = 30.5;
+  Real finalTime = 300;
   Real startTime = 0.0;
 
   TimeMap::SolutionCurve solution(initTime);
   TimeMap tm3(s);
-  Real d[] = {Real(1.0),Real(0.0),Real(1.0),Real(0.0),Real(0.0),Real(0.0)};
+  Real d[] = {Real(-1.0),Real(-1.0),Real(1.0),Real(1e-10),Real(1e-10),Real(1e-10)};
 
 
   Vector u3(dim,d);
@@ -197,7 +197,7 @@ int main(int, char*[]){
   //}
 
 
-    for(double d = 0.0 ; d < 30.5; d = d + 0.002){
+    for(double d = 0.0 ; d < 300; d = d + 0.01){
         //cout << "t: " << d << " : "<< solution(d) << endl;
 
         //plot 2d output
