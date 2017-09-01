@@ -149,7 +149,12 @@ string convert(long double myLongDouble) {
     return blah.str();
 }
 
-int main(int, char*[]){
+void intro();
+void part(string, string, string);
+void partLast(string, string, string);
+void ending();
+
+int main(int argc, char* argv[]){
 
   using namespace LD;
   MpFloat::setDefaultPrecision(1280);
@@ -179,7 +184,7 @@ int main(int, char*[]){
 
   TimeMap::SolutionCurve solution(initTime);
   TimeMap tm3(s);
-  Real d[] = {Real(-1.0),Real(-1.0),Real(1.0),Real(1e-10),Real(1e-10),Real(1e-10)};
+  Real d[] = {Real(1.0),Real(1.0),Real(1.0),Real(0.0),Real(0.0),Real(2e-1)};
 
 
   Vector u3(dim,d);
@@ -196,8 +201,14 @@ int main(int, char*[]){
   //show(i*solution.getRightDomain()/N,solution,f);
   //}
 
+  //double finalTime = 300;
+  double step = 0.01;
 
-    for(double d = 0.0 ; d < 300; d = d + 0.01){
+  double treshold = 299.99;
+
+
+    intro();
+    for(double d = 0.0 ; d <= 300; d = d + step){
         //cout << "t: " << d << " : "<< solution(d) << endl;
 
         //plot 2d output
@@ -226,10 +237,98 @@ int main(int, char*[]){
         find_and_replace(text1, "e", "*^");
         find_and_replace(text2, "e", "*^");
 
-        cout << "{" << text0 << "," << text1 << "," << text2 << "}, ";
+
+
+        if(d > treshold){
+               // cout << "{" << text0 << "," << text1 << "," << text2 << "}";
+              partLast(text0, text1, text2);
+                //cout << "last "<< d  << endl;
+        } else {
+             //  cout << "{" << text0 << "," << text1 << "," << text2 << "}, ";
+             part(text0, text1, text2);
+               //cout << "go " << d << endl;
+        }
+
+
+
 
         //cout << "t: " << d << " : "<< solution(d)[0] << " , "<< solution(d)[1] << " , "<< solution(d)[2] << endl;
     }
 
+    ending();
+
 
 }
+
+void intro(){
+    cout << "(* Content-type: application/vnd.wolfram.mathematica *)" << endl;
+    cout << ""<< endl;
+    cout << "(*** Wolfram Notebook File ***)"<< endl;
+    cout << "(* http://www.wolfram.com/nb *)"<< endl;
+    cout << ""<< endl;
+    cout << "(* CreatedBy='Mathematica 10.3' *)"<< endl;
+    cout << ""<< endl;
+    cout << "(*CacheID: 234*)"<< endl;
+    cout << "(* Internal cache information:"<< endl;
+    cout << "NotebookFileLineBreakTest"<< endl;
+    cout << "NotebookFileLineBreakTest"<< endl;
+    cout << "NotebookDataPosition[       158,          7]"<< endl;
+    cout << "NotebookDataLength[      1390,         50]"<< endl;
+    cout << "NotebookOptionsPosition[      1151,         37]"<< endl;
+    cout << "NotebookOutlinePosition[      1494,         52]"<< endl;
+    cout << "CellTagsIndexPosition[      1451,         49]"<< endl;
+    cout << "WindowFrame->Normal*)"<< endl;
+    cout << ""<< endl;
+    cout << "(* Beginning of Notebook Content *)"<< endl;
+    cout << "Notebook[{"<< endl;
+    cout << "Cell[BoxData["<< endl;
+    cout << "RowBox[{\"data\", \"=\", "<< endl;
+    cout << "RowBox[{\"{\","<< endl;
+    cout << "RowBox[{"<< endl;
+}
+
+void part(string d1, string d2, string d3){
+    cout << "RowBox[{\"{\"," << endl;
+
+    //RowBox[{"1", ",", "1", ",", "1"}], "}"}], ",",
+
+
+    cout << "RowBox[{\"" + d1 + "\", \",\", \"" + d2 + "\", \",\", \"" + d3 + "\"}], \"}\"}], \",\", "<< endl;
+}
+
+void partLast(string d0, string d1, string d2){
+    cout << "RowBox[{\"{\"," << endl;
+
+    cout << "RowBox[{\"" + d0 + "\", \",\", \"" + d1 + "\", \",\", \"" + d2 + "\"}], \"}\"}]}], " << endl;
+}
+
+void ending(){
+    cout << "\"}\"}]}]], \"Input\"," << endl;
+    cout << "CellChangeTimes->{{3.7229380911609364`*^9, 3.7129380928383675`*^9}}]" << endl;
+    cout << "},"<< endl;
+    cout << "WindowSize->{1510, 781}," << endl;
+    cout << "WindowMargins->{{0, Automatic}, {Automatic, 0}}," << endl;
+    cout << "FrontEndVersion->\"10.3 for Microsoft Windows (64-bit) (October 9, 2015)\","<< endl;
+    cout << "StyleDefinitions->\"Default.nb\""<< endl;
+    cout << "]"<< endl;
+    cout << "(* End of Notebook Content *)"<< endl;
+    cout << ""<< endl;
+    cout << "(* Internal cache information *)"<< endl;
+    cout << "(*CellTagsOutline"<< endl;
+    cout << "CellTagsIndex->{}"<< endl;
+    cout << "*)"<< endl;
+    cout << "(*CellTagsIndex"<< endl;
+    cout << "CellTagsIndex->{}"<< endl;
+    cout << "*)"<< endl;
+    cout << "(*NotebookFileOutline"<< endl;
+    cout << "Notebook[{"<< endl;
+    cout << "Cell[558, 20, 589, 15, 31, \"Input\"]"<< endl;
+    cout << "}"<< endl;
+    cout << "]"<< endl;
+    cout << "*)"<< endl;
+    cout << ""<< endl;
+    cout << "(* End of internal cache information *)"<< endl;
+    cout << ""<< endl;
+}
+
+
