@@ -4,6 +4,8 @@
 #include "capd/capdlib.h"
 #include "capd/krak/krak.h"
 #include "capd/mpcapdlib.h"
+#include <sstream>
+
 using namespace std;
 using namespace capd;
 using capd::autodiff::Node;
@@ -184,7 +186,25 @@ int main(int argc, char* argv[]){
 
   TimeMap::SolutionCurve solution(initTime);
   TimeMap tm3(s);
-  Real d[] = {Real(1.0),Real(1.0),Real(1.0),Real(0.0),Real(0.0),Real(2e-1)};
+
+    istringstream ss1(argv[1]);
+    istringstream ss2(argv[2]);
+    istringstream ss3(argv[3]);
+
+    double real1;
+    double real2;
+    double real3;
+
+    ss1 >> real1;
+    ss2 >> real2;
+    ss3 >> real3;
+
+
+
+
+
+  Real d[] = {Real(1.0),Real(1.0),Real(1.0),Real(real1),Real(real2),Real(real3)};
+  //Real d[] = {Real(1.0),Real(1.0),Real(1.0),Real(0.0),Real(-2e-2),Real(2e-2)};
 
 
   Vector u3(dim,d);
@@ -207,55 +227,45 @@ int main(int argc, char* argv[]){
   double treshold = 299.99;
 
 
-    intro();
+
+
+
+    //intro();
     for(double d = 0.0 ; d <= 300; d = d + step){
         //cout << "t: " << d << " : "<< solution(d) << endl;
-
-        //plot 2d output
-        /*string text0 = convert(solution(d)[0]);
-        string text1 = convert(solution(d)[1]);
-
-        find_and_replace(text0, "e", "*^");
-        find_and_replace(text1, "e", "*^");
-
-        //cout << "{" << solution(d)[0] << "," << solution(d)[1] << ", 0"<< "}, ";
-
-        cout << "{" << text0 << "," << text1 << ", 0"<< "}, ";
-        */
-
-
-
-
-
 
         // plot 3d output
         string text0 = convert(solution(d)[0]);
         string text1 = convert(solution(d)[1]);
         string text2 = convert(solution(d)[2]);
 
-        find_and_replace(text0, "e", "*^");
-        find_and_replace(text1, "e", "*^");
-        find_and_replace(text2, "e", "*^");
+        //find_and_replace(text0, "e", "*^");
+        //find_and_replace(text1, "e", "*^");
+        //find_and_replace(text2, "e", "*^");
 
+        cout << text0 << "," << text1 << "," << text2 << endl;
 
-
+/*
         if(d > treshold){
-               // cout << "{" << text0 << "," << text1 << "," << text2 << "}";
-              partLast(text0, text1, text2);
-                //cout << "last "<< d  << endl;
+                cout << "{" << text0 << "," << text1 << "," << text2 << "}";
+              //partLast(text0, text1, text2);
+
+
+
         } else {
-             //  cout << "{" << text0 << "," << text1 << "," << text2 << "}, ";
-             part(text0, text1, text2);
-               //cout << "go " << d << endl;
+               cout << "{" << text0 << "," << text1 << "," << text2 << "}, ";
+             //part(text0, text1, text2);
+
         }
-
-
+        */
 
 
         //cout << "t: " << d << " : "<< solution(d)[0] << " , "<< solution(d)[1] << " , "<< solution(d)[2] << endl;
     }
 
-    ending();
+
+
+    //ending();
 
 
 }
@@ -289,10 +299,6 @@ void intro(){
 
 void part(string d1, string d2, string d3){
     cout << "RowBox[{\"{\"," << endl;
-
-    //RowBox[{"1", ",", "1", ",", "1"}], "}"}], ",",
-
-
     cout << "RowBox[{\"" + d1 + "\", \",\", \"" + d2 + "\", \",\", \"" + d3 + "\"}], \"}\"}], \",\", "<< endl;
 }
 
