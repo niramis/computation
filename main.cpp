@@ -5,6 +5,7 @@
 #include "capd/krak/krak.h"
 #include "capd/mpcapdlib.h"
 #include <sstream>
+#include <fstream>
 
 using namespace std;
 using namespace capd;
@@ -155,6 +156,7 @@ void intro();
 void part(string, string, string);
 void partLast(string, string, string);
 void ending();
+void matlab_title(double, double, double, double);
 
 int main(int argc, char* argv[]){
 
@@ -181,7 +183,7 @@ int main(int argc, char* argv[]){
   s.setRelativeTolerance(1e-20);
 
   Real initTime = 0.0;
-  Real finalTime = 300;
+  Real finalTime = 10;
   Real startTime = 0.0;
 
   TimeMap::SolutionCurve solution(initTime);
@@ -190,14 +192,18 @@ int main(int argc, char* argv[]){
     istringstream ss1(argv[1]);
     istringstream ss2(argv[2]);
     istringstream ss3(argv[3]);
+    istringstream ss$(argv[4]);
 
     double real1;
     double real2;
     double real3;
+    double counter;
+
 
     ss1 >> real1;
     ss2 >> real2;
     ss3 >> real3;
+    ss3 >> counter;
 
 
 
@@ -228,10 +234,19 @@ int main(int argc, char* argv[]){
 
 
 
+    ofstream myfile;
+    //myfile.open("/home/marin/Desktop/project-capd/example2.txt");
+    myfile.open(argv[5]);
+
+
+    //matlab_title(real1, real2, real3, counter);
+    myfile << "counter: " << counter <<  ", vx: " << real1 << ", vy: " << real2 << ", vz: " << real3 << "\n";
+
+
 
 
     //intro();
-    for(double d = 0.0 ; d <= 300; d = d + step){
+    for(double d = 0.0 ; d <= 10; d = d + step){
         //cout << "t: " << d << " : "<< solution(d) << endl;
 
         // plot 3d output
@@ -243,7 +258,9 @@ int main(int argc, char* argv[]){
         //find_and_replace(text1, "e", "*^");
         //find_and_replace(text2, "e", "*^");
 
-        cout << text0 << "," << text1 << "," << text2 << endl;
+        //cout << text0 << "," << text1 << "," << text2 << endl;
+        myfile << text0 << "," << text1 << "," << text2 << "\n";
+
 
 /*
         if(d > treshold){
@@ -263,10 +280,17 @@ int main(int argc, char* argv[]){
         //cout << "t: " << d << " : "<< solution(d)[0] << " , "<< solution(d)[1] << " , "<< solution(d)[2] << endl;
     }
 
+    myfile.close();
+
 
 
     //ending();
 
+
+}
+
+void matlab_title(double d1, double d2, double d3, double counter){
+    cout << "counter: " << counter <<  ", vx: " << d1 << ", vy: " << d2 << ", vz: " << d3 << "\n";
 
 }
 
