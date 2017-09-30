@@ -170,7 +170,7 @@ int main(int argc, char* argv[]){
     MpFloat::setDefaultPrecision(1280);
     cout.precision(10);
     int paramsNumber = 2;
-    int dim = 6;
+    int dim = 4;
 
     // funkcja getV2 jest identyczna jak getV tylko jest uproszczona - os z nie jest uwzgledniana
     Map f(dim==4? getV2 : myGetV3, dim, dim, paramsNumber);
@@ -195,9 +195,8 @@ int main(int argc, char* argv[]){
     TimeMap::SolutionCurve solution(initTime);
     TimeMap tm3(s);
 
-    //istringstream ss1(argv[1]);
-    //istringstream ss2(argv[2]);
-    //istringstream ss3(argv[3]);
+
+
     istringstream ss4(argv[4]);
 
     double real1;
@@ -205,13 +204,6 @@ int main(int argc, char* argv[]){
     double real3;
     double counter;
 
-
-
-
-
-    //ss1 >> real1;
-    //ss2 >> real2;
-    //ss3 >> real3;
     ss4 >> counter;
 
     // Define Poincare section
@@ -239,9 +231,10 @@ int main(int argc, char* argv[]){
     Real z(rValue * sin(thetaValue));
 
 
-  Real d[] = {Real(x),Real(y),Real(z),Real(0.0),Real(.0),Real(.0)};
+  //Real d[] = {Real(x),Real(y),Real(z),Real(0.0),Real(.0),Real(.0)};
   //Real d[] = {Real(1.0),Real(1.0),Real(1.0),Real(0.0),Real(-2e-2),Real(2e-2)};
 
+    Real d[] = {Real(1.0),Real(.0),Real(.0),Real(0.0)};
 
   Vector u3(dim,d);
 
@@ -280,7 +273,7 @@ int main(int argc, char* argv[]){
         //find_and_replace(text2, "e", "*^");
 
         //cout << text0 << "," << text1 << "," << text2 << endl;
-        myfile << text0 << "," << text1 << "," << text2 << "\n";
+        myfile << text0 << "," << text1 << "," << "0.0" << "\n";
 
 
 /*
