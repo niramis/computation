@@ -6,6 +6,9 @@
 #include "capd/mpcapdlib.h"
 #include <sstream>
 #include <fstream>
+#include "capd/poincare/NonlinearSection.h"
+#include "capd/poincare/PoincareMap.h"
+#include <cmath>
 
 using namespace std;
 using namespace capd;
@@ -84,6 +87,8 @@ params[], int /*noParams*/){
     Node ySquare = sqr(y);
     Node zSquare = sqr(z);
 
+    sin(in[0]);
+
     //Node squaresSum = xSquare + ySquare + zSquare;
     Node squaresSum3 = (sqr(in[0]) + sqr(in[1]) + sqr(in[2])) ^ 1.5;
     Node squaresSum5 = (sqr(in[0]) + sqr(in[1]) + sqr(in[2])) ^ 2.5;
@@ -104,6 +109,7 @@ params[], int /*noParams*/){
 
 
 }
+
 
 void getV2(Node t, Node in[], int /*dimIn*/, Node out[], int /*dimOut*/, Node params[], int /*noParams*/)
 {
@@ -160,39 +166,39 @@ void matlab_title(double, double, double, double);
 
 int main(int argc, char* argv[]){
 
-  using namespace LD;
-  MpFloat::setDefaultPrecision(1280);
-  cout.precision(10);
-  int paramsNumber = 2;
-  int dim = 6;
+    using namespace LD;
+    MpFloat::setDefaultPrecision(1280);
+    cout.precision(10);
+    int paramsNumber = 2;
+    int dim = 6;
 
-  // funkcja getV2 jest identyczna jak getV tylko jest uproszczona - os z nie jest uwzgledniana
-  Map f(dim==4? getV2 : myGetV3, dim, dim, paramsNumber);
+    // funkcja getV2 jest identyczna jak getV tylko jest uproszczona - os z nie jest uwzgledniana
+    Map f(dim==4? getV2 : myGetV3, dim, dim, paramsNumber);
 
-  //Map f(getV,dim,dim,paramsNumber);
+    //Map f(getV,dim,dim,paramsNumber);
 
-  Real CS = 1.633022997504943e-7;
-  Real CE = 0.25326384620828446;
+    Real CS = 1.633022997504943e-7;
+    Real CE = 0.25326384620828446;
 
-  f.setParameter(0,CE);
-  f.setParameter(1,CS);
+    f.setParameter(0,CE);
+    f.setParameter(1,CS);
 
-  int order = 20;
-  OdeSolver s(f,order, OdeSolver::StepControlType(2,1e-12));
-  s.setAbsoluteTolerance(1e-20);
-  s.setRelativeTolerance(1e-20);
+    int order = 10;
+    OdeSolver s(f,order, OdeSolver::StepControlType(2,1e-12));
+    s.setAbsoluteTolerance(1e-20);
+    s.setRelativeTolerance(1e-20);
 
-  Real initTime = 0.0;
-  Real finalTime = 10;
-  Real startTime = 0.0;
+    Real initTime = 0.0;
+    Real finalTime = 30;
+    Real startTime = 0.0;
 
-  TimeMap::SolutionCurve solution(initTime);
-  TimeMap tm3(s);
+    TimeMap::SolutionCurve solution(initTime);
+    TimeMap tm3(s);
 
-    istringstream ss1(argv[1]);
-    istringstream ss2(argv[2]);
-    istringstream ss3(argv[3]);
-    istringstream ss$(argv[4]);
+    //istringstream ss1(argv[1]);
+    //istringstream ss2(argv[2]);
+    //istringstream ss3(argv[3]);
+    istringstream ss4(argv[4]);
 
     double real1;
     double real2;
@@ -200,37 +206,53 @@ int main(int argc, char* argv[]){
     double counter;
 
 
-    ss1 >> real1;
-    ss2 >> real2;
-    ss3 >> real3;
-    ss3 >> counter;
+
+
+
+    //ss1 >> real1;
+    //ss2 >> real2;
+    //ss3 >> real3;
+    ss4 >> counter;
+
+    // Define Poincare section
+    //LDNonlinearSection section("var:x,y,z;fun:z-1");
+    //LDPoincareMap pm(s, section);
+
+    istringstream ssR(argv[1]);
+    istringstream ssPhi(argv[2]);
+    istringstream ssTheta(argv[3]);
+
+
+    double rValue = 1.0;
+    double phiValue;
+    double thetaValue = 2.61799387799;
+
+    //ssR >> rValue;
+    ssPhi >> phiValue;
+    //ssTheta >> thetaValue;
 
 
 
 
+    Real x(rValue * cos(thetaValue) * cos(phiValue));
+    Real y(rValue * cos(thetaValue) * sin(phiValue));
+    Real z(rValue * sin(thetaValue));
 
-  Real d[] = {Real(1.0),Real(1.0),Real(1.0),Real(real1),Real(real2),Real(real3)};
+
+  Real d[] = {Real(x),Real(y),Real(z),Real(0.0),Real(.0),Real(.0)};
   //Real d[] = {Real(1.0),Real(1.0),Real(1.0),Real(0.0),Real(-2e-2),Real(2e-2)};
 
 
   Vector u3(dim,d);
-  //cout << f(u3) << endl;
 
   tm3(finalTime, u3,solution);
-  //cout << "domain = [" << solution.getLeftDomain() << "," <<
-  //solution.getRightDomain() << "]\n";
-  //cout << "------" << endl;
 
   int N = 500;
-
-//  for(int i=0;i<=N;++i){
-  //show(i*solution.getRightDomain()/N,solution,f);
-  //}
 
   //double finalTime = 300;
   double step = 0.01;
 
-  double treshold = 299.99;
+  double treshold = 29.99;
 
 
 
@@ -240,13 +262,12 @@ int main(int argc, char* argv[]){
 
 
     //matlab_title(real1, real2, real3, counter);
-    myfile << "counter: " << counter <<  ", vx: " << real1 << ", vy: " << real2 << ", vz: " << real3 << "\n";
+    myfile << "counter: " << counter <<  ", r: " << rValue << ", phi: " << phiValue << ", theta: " << thetaValue << "\n";
 
 
 
 
-    //intro();
-    for(double d = 0.0 ; d <= 10; d = d + step){
+    for(double d = 0.0 ; d <= 30; d = d + step){
         //cout << "t: " << d << " : "<< solution(d) << endl;
 
         // plot 3d output
@@ -262,6 +283,7 @@ int main(int argc, char* argv[]){
         myfile << text0 << "," << text1 << "," << text2 << "\n";
 
 
+/*
 /*
         if(d > treshold){
                 cout << "{" << text0 << "," << text1 << "," << text2 << "}";
@@ -281,10 +303,6 @@ int main(int argc, char* argv[]){
     }
 
     myfile.close();
-
-
-
-    //ending();
 
 
 }
