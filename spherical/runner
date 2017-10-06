@@ -9,15 +9,15 @@ v_z=`echo $v_p + $v_p | bc`
 
 
 counter=0
-for i in {0..31415}
+for i in {0..999}
 do
 #	for j in {0..100}
 #	do
 
-		theta=0.6154
-		phi=1
+		theta=0.6154797086703874
+		phi=0.005
 		r=1
-		vr=0.00000000000001;
+		vr=0;
 
 
 #		r2=`python -c "print "$r`
@@ -26,7 +26,7 @@ do
 #			phi2=`python -c "print "$phi`
 
 		theta2=`python -c "print "$theta`
-		phi2=`python -c "print "$phi`
+		phi2=`python -c "print "$phi"*"$i`
 		r2=`python -c "print "$r`
 		vr2=`python -c "print "$r`
 
@@ -41,7 +41,7 @@ do
 
 #		`./main ${r2} ${vr2} ${theta2} ${phi2} ${counter} /mnt/hgfs/outdata/matlab/spherical/test${counter}.txt`
 
-		`./main ${r2} ${vr2} ${phi2} ${theta2} ${counter} /mnt/hgfs/outdata/matlab/spherical2/test${counter}.txt`
+		`./main ${r2} ${vr2} ${theta2} ${phi2} ${counter} /mnt/hgfs/outdata/matlab/spherical2/test${counter}.txt`
 
 		counter=$[$counter+1]
 #	done

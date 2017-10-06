@@ -123,29 +123,45 @@ void getSpherical(Node t, Node in[], int /*dimIn*/, Node out[], int /*dimOut*/, 
     // out 3 - phi'
 
 
-    // r'
 
-    out[0] = in[1];
 
-    Node theta = sqr((params[0])/(in[0]^3) - (in[1]^2)/(in[0]^2) - (params[1]*sin(in[2])/in[0]^3)^2);
 
-    // vr'
+    Node phi = (-params[1])/(in[0]^3);
+    Node inner = 2*params[0]/in[0]^3 ;
+    Node inner2 = ((params[1]^2)*((sin(in[2]))^4))/(in[0]^6);
+    Node inner3 = (in[1]^2)/(in[0]^2);
+    Node theta = sqr(inner - inner2 - inner3);
+
+    Node vr = -params[0] + params[1]*((sin(in[2]))^2)*phi/(in[0]^2) +in[0]*(((sin(in[2]))^2)*(phi^2) + theta^2);
+
+    //Node theta = sqr(2*params[0]/in[0]^3 - params[1]^2*sin(in[2])^4/in[0]^6 - in[1]^2/in[0]^2);
+
+
     //out[1] = ((-params[0]/in[0]^2) * in[1]/(sqr((in[1]^2) + in[0]*in[0]*(out[3]*out[3] + ((-params[1]/(in[0]^3))^2)*(sin(in[2])^2) ))));
 
-    out[1] = (-params[0] * in[1])/(in[1] * in[1] * sqr(in[1]*in[1] + in[0]*in[0]*(theta + (-params[1]/(in[0]^3))*sin(in[2]))));
+    //out[1] = (-params[0] + params[1]*(sin(in[2])^2)*phi)/(in[0])^2 in[0]*((sin(in[2])^2) * (phi)^2 + theta^2);
+
+    //out[1] = in[0]*(theta^2 + ((-params[1]/(in[0])^3)^2)*((sin(in[2]))^2)) + (params[1]*(-params[1]/(in[0])^3)*(sin(in[2]))^2 - params[0])/(in[0]*in[0]);
     // theta'
-    out[2] = sqr((params[0])/(in[0]^3) - (in[1]^2)/(in[0]^2) - (params[1]*sin(in[2])/in[0]^3)^2);
+    //out[2] = theta;
+
+
+
+
+
+
+
+    // r'
+    out[0] = in[1];
+
+    // vr'
+    out[1] = vr;
+
+    // theta'
+    out[2] = theta;
 
     // phi'
-    out[3] = -(params[1]/in[0]^3 );
-
-/*
-    out[0] = in[1];
-    out[1] = in[1];
-    out[2] = in[1];
-    out[3] = in[1];
-*/
-
+    out[3] = phi;
 
 }
 
@@ -209,10 +225,10 @@ int main(int argc, char* argv[]){
     MpFloat::setDefaultPrecision(1280);
     cout.precision(10);
     int paramsNumber = 2;
-    int dim = 6;
+    int dim = 4;
 
     // funkcja getV2 jest identyczna jak getV tylko jest uproszczona - os z nie jest uwzgledniana
-    Map f(dim==4? getV2 : myGetV3, dim, dim, paramsNumber);
+    Map f(dim==4? getSpherical : myGetV3, dim, dim, paramsNumber);
 
     //Map f(getV,dim,dim,paramsNumber);
 
@@ -228,7 +244,7 @@ int main(int argc, char* argv[]){
     s.setRelativeTolerance(1e-20);
 
     Real initTime = 0.0;
-    Real finalTime = 30;
+    Real finalTime = 200;
     Real startTime = 0.0;
 
     TimeMap::SolutionCurve solution(initTime);
@@ -254,8 +270,9 @@ int main(int argc, char* argv[]){
 
     istringstream ssR(argv[1]);
     istringstream ssVR(argv[2]);
-    istringstream ssPhi(argv[3]);
-    istringstream ssTheta(argv[4]);
+    istringstream ssTheta(argv[3]);
+    istringstream ssPhi(argv[4]);
+
 
 
     double rValue;
@@ -270,13 +287,14 @@ int main(int argc, char* argv[]){
 
 
 
-
+/*
     Real x(rValue * cos(thetaValue) * cos(phiValue));
     Real y(rValue * cos(thetaValue) * sin(phiValue));
     Real z(rValue * sin(thetaValue));
+    */
 
 
-  Real d[] = {Real(x),Real(y),Real(z),Real(0.0),Real(.0),Real(.0)};
+  Real d[] = {Real(rValue),Real(vRValue),Real(thetaValue),Real(phiValue)};
   //Real d[] = {Real(1.0),Real(1.0),Real(1.0),Real(0.0),Real(-2e-2),Real(2e-2)};
 
 
@@ -289,7 +307,7 @@ int main(int argc, char* argv[]){
   //double finalTime = 300;
   double step = 0.01;
 
-  double treshold = 29.99;
+  double treshold = 199.99;
 
 
 
@@ -304,17 +322,27 @@ int main(int argc, char* argv[]){
 
 
 
-    for(double d = 0.0 ; d <= 30; d = d + step){
+    for(double d = 0.0 ; d <= 200; d = d + step){
         //cout << "t: " << d << " : "<< solution(d) << endl;
 
         // plot 3d output
+        /*
         string text0 = convert(solution(d)[0]);
-        string text1 = convert(solution(d)[1]);
-        string text2 = convert(solution(d)[2]);
+        string text1 = convert(solution(d)[2]);
+        string text2 = convert(solution(d)[3]);
+        */
+
+        double x = (solution(d)[0])*(sin(solution(d)[2]))*(cos(solution(d)[3]));
+        double y = (solution(d)[0])*(sin(solution(d)[2]))*(sin(solution(d)[3]));
+        double z = (solution(d)[0])*(cos(solution(d)[2]));
 
         //find_and_replace(text0, "e", "*^");
         //find_and_replace(text1, "e", "*^");
         //find_and_replace(text2, "e", "*^");
+
+        string text0 = convert(x);
+        string text1 = convert(y);
+        string text2 = convert(z);
 
         //cout << text0 << "," << text1 << "," << text2 << endl;
         myfile << text0 << "," << text1 << "," << text2 << "\n";
@@ -347,72 +375,5 @@ int main(int argc, char* argv[]){
 void matlab_title(double d1, double d2, double d3, double counter){
     cout << "counter: " << counter <<  ", vx: " << d1 << ", vy: " << d2 << ", vz: " << d3 << "\n";
 
-}
-
-void intro(){
-    cout << "(* Content-type: application/vnd.wolfram.mathematica *)" << endl;
-    cout << ""<< endl;
-    cout << "(*** Wolfram Notebook File ***)"<< endl;
-    cout << "(* http://www.wolfram.com/nb *)"<< endl;
-    cout << ""<< endl;
-    cout << "(* CreatedBy='Mathematica 10.3' *)"<< endl;
-    cout << ""<< endl;
-    cout << "(*CacheID: 234*)"<< endl;
-    cout << "(* Internal cache information:"<< endl;
-    cout << "NotebookFileLineBreakTest"<< endl;
-    cout << "NotebookFileLineBreakTest"<< endl;
-    cout << "NotebookDataPosition[       158,          7]"<< endl;
-    cout << "NotebookDataLength[      1390,         50]"<< endl;
-    cout << "NotebookOptionsPosition[      1151,         37]"<< endl;
-    cout << "NotebookOutlinePosition[      1494,         52]"<< endl;
-    cout << "CellTagsIndexPosition[      1451,         49]"<< endl;
-    cout << "WindowFrame->Normal*)"<< endl;
-    cout << ""<< endl;
-    cout << "(* Beginning of Notebook Content *)"<< endl;
-    cout << "Notebook[{"<< endl;
-    cout << "Cell[BoxData["<< endl;
-    cout << "RowBox[{\"data\", \"=\", "<< endl;
-    cout << "RowBox[{\"{\","<< endl;
-    cout << "RowBox[{"<< endl;
-}
-
-void part(string d1, string d2, string d3){
-    cout << "RowBox[{\"{\"," << endl;
-    cout << "RowBox[{\"" + d1 + "\", \",\", \"" + d2 + "\", \",\", \"" + d3 + "\"}], \"}\"}], \",\", "<< endl;
-}
-
-void partLast(string d0, string d1, string d2){
-    cout << "RowBox[{\"{\"," << endl;
-
-    cout << "RowBox[{\"" + d0 + "\", \",\", \"" + d1 + "\", \",\", \"" + d2 + "\"}], \"}\"}]}], " << endl;
-}
-
-void ending(){
-    cout << "\"}\"}]}]], \"Input\"," << endl;
-    cout << "CellChangeTimes->{{3.7229380911609364`*^9, 3.7129380928383675`*^9}}]" << endl;
-    cout << "},"<< endl;
-    cout << "WindowSize->{1510, 781}," << endl;
-    cout << "WindowMargins->{{0, Automatic}, {Automatic, 0}}," << endl;
-    cout << "FrontEndVersion->\"10.3 for Microsoft Windows (64-bit) (October 9, 2015)\","<< endl;
-    cout << "StyleDefinitions->\"Default.nb\""<< endl;
-    cout << "]"<< endl;
-    cout << "(* End of Notebook Content *)"<< endl;
-    cout << ""<< endl;
-    cout << "(* Internal cache information *)"<< endl;
-    cout << "(*CellTagsOutline"<< endl;
-    cout << "CellTagsIndex->{}"<< endl;
-    cout << "*)"<< endl;
-    cout << "(*CellTagsIndex"<< endl;
-    cout << "CellTagsIndex->{}"<< endl;
-    cout << "*)"<< endl;
-    cout << "(*NotebookFileOutline"<< endl;
-    cout << "Notebook[{"<< endl;
-    cout << "Cell[558, 20, 589, 15, 31, \"Input\"]"<< endl;
-    cout << "}"<< endl;
-    cout << "]"<< endl;
-    cout << "*)"<< endl;
-    cout << ""<< endl;
-    cout << "(* End of internal cache information *)"<< endl;
-    cout << ""<< endl;
 }
 
